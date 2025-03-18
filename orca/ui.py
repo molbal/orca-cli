@@ -6,8 +6,8 @@ import inquirer
 from rich import print
 from models import pull_model
 from browser import open_browser
+from downloader import download_model
 from registry import get_model_tags
-from downloader import export_gguf
 
 def prompt_model_action(selected_model):
     """
@@ -40,7 +40,7 @@ def prompt_model_action(selected_model):
         case _:
             pass
 
-def prompt_model_tag_action(selected_model, tags):
+def prompt_model_tag_action(selected_model, tags, selected_action=None):
     """
     Prompt the user for actions on a specific model tag.
 
@@ -64,15 +64,18 @@ def prompt_model_tag_action(selected_model, tags):
         return
 
     print(f"The selected tag is {selected_tag}")
-    questions = [inquirer.List('action',
-                               message=f"What to do with {selected_model}:{selected_tag}?",
-                               choices=['pull', 'open in browser', 'export gguf', '<- select another tag'],
-                               )]
-    answers = inquirer.prompt(questions)
-    if answers is None:
-        return
 
-    match answers['action']:
+    if selected_tag is None:
+        questions = [inquirer.List('action',
+                                   message=f"What to do with {selected_model}:{selected_tag}?",
+                                   choices=['pull', 'open in browser', 'export gguf', '<- select another tag'],
+                                   )]
+        answers = inquirer.prompt(questions)
+        if answers is None:
+            return
+        selected_action = answers['action']
+
+    match selected_action:
         case 'pull':
             pull_model(f"{selected_model}:{selected_tag}")
         case 'open in browser':
@@ -106,7 +109,7 @@ def export_model_gguf(selected_model):
         print("[bold red]No tags found for this model[/bold red]")
         return
 
-    prompt_model_tag_action(selected_model, tags)
+    prompt_model_tag_action(selected_model, tags, selected_action="export gguf")
 
 def export_tag_gguf(selected_model, selected_tag):
     """
@@ -148,7 +151,7 @@ def export_tag_gguf(selected_model, selected_tag):
             return
 
     # Download the GGUF file
-    success = export_gguf(selected_model, selected_tag, output_path)
+    success = download_model(selected_model, selected_tag, output_path)
 
     if success:
         print(f"[bold green]GGUF file exported to: {output_path}[/bold green]")
@@ -167,12 +170,9 @@ def prompt_model_selector(models, query=""):
     Returns:
         The selected model name or None if canceled
     """
-    models_select = models.copy()
-    models_select.append('<- exit')
-
     questions = [inquirer.List('model',
                                message="Select a model from the results",
-                               choices=models_select,
+                               choices=models,
                                )]
 
     answers = inquirer.prompt(questions)

@@ -4,8 +4,6 @@ Main entry point for the ORCA application.
 """
 import typer
 from rich import print
-import inquirer
-
 from ui import prompt_model_action, prompt_model_selector
 from registry import search_models
 
