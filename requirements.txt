@@ -1,0 +1,5 @@
+typer
+rich
+inquirer
+requests
+beautifulsoup4
