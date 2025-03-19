@@ -31,9 +31,7 @@ def search(query: str = typer.Argument("")):
 
     models = search_models(query)
     selected_model = prompt_model_selector(models)
-    if selected_model is None:
-        return
-    if selected_model == "<- exit":
+    if selected_model == "<- exit" or selected_model == "":
         return
     else:
         prompt_model_action(selected_model)

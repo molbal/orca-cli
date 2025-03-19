@@ -1,8 +1,13 @@
 """
 Functions for browser interactions.
 """
+import requests
 import typer
+from bs4 import BeautifulSoup
 from rich import print
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.progress import Progress, TextColumn, SpinnerColumn
 
 
 def open_browser(selected_model):
@@ -19,5 +24,23 @@ def open_browser(selected_model):
         typer.launch(f"https://ollama.com/library/{selected_model}")
 
 
-def fetch_readme(selected_model):
-    pass
+
+def read_modelfile(selected_model):
+    if "/" in selected_model:
+        url = f"https://ollama.com/{selected_model}"
+    else:
+        url = f"https://ollama.com/library/{selected_model}"
+
+    with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            transient=True,
+    ) as progress:
+        progress.add_task(description=f"Fetching modelcard for {selected_model}...", total=None)
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, features="html.parser")
+
+        c = Console()
+    for md in soup.select('#editor'):
+        modelfile = md.contents[0]
+        c.print(Markdown(modelfile))

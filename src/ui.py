@@ -5,7 +5,7 @@ import os
 import inquirer
 from rich import print
 from models import pull_model
-from browser import open_browser
+from browser import open_browser, read_modelfile
 from downloader import download_model
 from registry import get_model_tags
 
@@ -18,7 +18,7 @@ def prompt_model_action(selected_model):
     """
     questions = [inquirer.List('action',
                                message=f"What do you want to do with {selected_model}?",
-                               choices=['pull', 'view tags', 'open in browser', 'export gguf', '<- back', '<- exit'],
+                               choices=['pull', 'view tags', 'read modelfile', 'open in browser', 'export gguf', '<- back', '<- exit'],
                                )]
     answers = inquirer.prompt(questions)
     if answers is None:
@@ -31,6 +31,8 @@ def prompt_model_action(selected_model):
             view_tags(selected_model)
         case 'open in browser':
             open_browser(selected_model)
+        case 'read modelfile':
+            read_modelfile(selected_model)
         case 'export gguf':
             export_model_gguf(selected_model)
         case '<- back':
@@ -88,6 +90,7 @@ def prompt_model_tag_action(selected_model, tags, selected_action=None):
         case _:
             pass
 
+
 def view_tags(selected_model):
     """
     View and interact with tags for a selected model.
@@ -111,6 +114,8 @@ def export_model_gguf(selected_model):
         return
 
     prompt_model_tag_action(selected_model, tags, selected_action="export gguf")
+
+
 
 def export_tag_gguf(selected_model, selected_tag):
     """
@@ -177,4 +182,6 @@ def prompt_model_selector(models, query=""):
                                )]
 
     answers = inquirer.prompt(questions)
+    if answers is None:
+        return ""
     return answers['model']
