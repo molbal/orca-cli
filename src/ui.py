@@ -117,7 +117,7 @@ def export_model_gguf(selected_model):
 
 
 
-def export_tag_gguf(selected_model, selected_tag):
+def export_tag_gguf(selected_model, selected_tag, filename="", directory="."):
     """
     Export a GGUF file for a specific model tag.
 
@@ -125,26 +125,30 @@ def export_tag_gguf(selected_model, selected_tag):
         selected_model: The model to export
         selected_tag: The tag to export
     """
-    # Get default filename
-    default_filename = f"{selected_model.split('/')[-1]}-{selected_tag}.gguf"
 
-    # Ask for output location
-    questions = [
-        inquirer.Text('filename',
-                     message="Enter output filename",
-                     default=default_filename),
-        inquirer.Path('directory',
-                     message="Enter output directory",
-                     path_type=inquirer.Path.DIRECTORY,
-                     default=os.getcwd(),
-                     exists=True)
-    ]
+    if filename=="" and directory==".":
+        # Get default filename
+        default_filename = f"{selected_model.split('/')[-1]}-{selected_tag}.gguf"
 
-    answers = inquirer.prompt(questions)
-    if answers is None:
-        return
+        # Ask for output location
+        questions = [
+            inquirer.Text('filename',
+                         message="Enter output filename",
+                         default=default_filename),
+            inquirer.Path('directory',
+                         message="Enter output directory",
+                         path_type=inquirer.Path.DIRECTORY,
+                         default=os.getcwd(),
+                         exists=True)
+        ]
 
-    output_path = os.path.join(answers['directory'], answers['filename'])
+        answers = inquirer.prompt(questions)
+        if answers is None:
+            return
+
+        output_path = os.path.join(answers['directory'], answers['filename'])
+    else:
+        output_path = os.path.join(directory, filename)
 
     # Confirm if file exists
     if os.path.exists(output_path):
