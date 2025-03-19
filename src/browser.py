@@ -17,3 +17,7 @@ def open_browser(selected_model):
         typer.launch(f"https://ollama.com/{selected_model}")
     else:
         typer.launch(f"https://ollama.com/library/{selected_model}")
+
+
+def fetch_readme(selected_model):
+    pass

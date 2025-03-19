@@ -47,6 +47,7 @@ def prompt_model_tag_action(selected_model, tags, selected_action=None):
     Args:
         selected_model: The model to perform actions on
         tags: List of available tags for the model
+        :param selected_action: Unless this is set, a selector will be displayed.
     """
     tags_select = tags.copy()
     tags_select.append('<- back')
@@ -106,7 +107,7 @@ def export_model_gguf(selected_model):
     """
     tags = get_model_tags(selected_model)
     if not tags:
-        print("[bold red]No tags found for this model[/bold red]")
+        print("[bold orange]Warning:[/bold orange] No tags found for this model")
         return
 
     prompt_model_tag_action(selected_model, tags, selected_action="export gguf")
@@ -154,9 +155,9 @@ def export_tag_gguf(selected_model, selected_tag):
     success = download_model(selected_model, selected_tag, output_path)
 
     if success:
-        print(f"[bold green]GGUF file exported to: {output_path}[/bold green]")
+        print(f"[bold green]Success:[/bold green] GGUF file exported to: {output_path}")
     else:
-        print("[bold red]Failed to export GGUF file[/bold red]")
+        print("[bold red]Error:[/bold red] Failed to export GGUF file")
 
 
 def prompt_model_selector(models, query=""):
