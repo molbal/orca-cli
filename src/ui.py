@@ -4,10 +4,10 @@ User interface functions for ORCA.
 import os
 import inquirer
 from rich import print
-from models import pull_model
-from browser import open_browser, read_modelfile
-from downloader import download_model
-from registry import get_model_tags
+from .models import pull_model
+from .browser import open_browser, read_modelfile
+from .downloader import download_model
+from .registry import get_model_tags
 
 def prompt_model_action(selected_model):
     """
@@ -68,7 +68,7 @@ def prompt_model_tag_action(selected_model, tags, selected_action=None):
 
     print(f"The selected tag is {selected_tag}")
 
-    if selected_tag is None:
+    if selected_action is None:
         questions = [inquirer.List('action',
                                    message=f"What to do with {selected_model}:{selected_tag}?",
                                    choices=['pull', 'open in browser', 'export gguf', '<- select another tag'],

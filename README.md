@@ -1,6 +1,6 @@
 # ORCA: Ollama Registry CLI Application
 
-ORCA is a command-line interface application that allows you to search, explore, and manage models from the Ollama Registry. It provides an intuitive interface for discovering models, viewing their tags, and pulling them to your local Ollama installation.
+ORCA is a command-line interface application that allows you to search, explore, and download models from the Ollama Registry. It provides an intuitive interface for discovering models, viewing their tags, and pulling them to your local Ollama installation.
 
 ## Features
 
@@ -31,44 +31,38 @@ ORCA is a command-line interface application that allows you to search, explore,
 
 ## Usage
 
-### Basic Commands
+### CLI Commands
 
-Search for models:
+ORCA provides the following commands:
+
+#### Search for models
+```bash
+python main.py search [QUERY]
+```
+- If no query is provided, you'll be prompted to enter a search term interactively.
+
+Example:
 ```bash
 python main.py search gemma3
 ```
 
-If you run the search command without arguments, you'll be prompted to enter a search term:
+#### Download a model
 ```bash
-python main.py search
+python main.py download [MODEL_NAME] [TAG] [FILE_NAME] [DIRECTORY]
+```
+- Downloads a specific model tag to the specified file and directory.
+
+Example:
+```bash
+python main.py download llama3.2 1b model.gguf .
 ```
 
-### CLI Interface
+### Getting Help
+You can always get help by using:
+```bash
+python main.py --help
+```
 
-ORCA provides a CLI interface that allows you to:
-
-1. Select a model from search results
-2. Choose actions for a model:
-   - Pull the model to your local Ollama installation
-   - View available tags
-   - Open the model page in your browser
-3. Select specific tags and perform actions on them
-
-## Project Structure
-
-- `main.py`: Entry point for the application
-- `models.py`: Functions for handling Ollama model operations
-- `browser.py`: Functions for browser interactions
-- `ui.py`: User interface functions
-- `registry.py`: Functions for interacting with the Ollama registry
-
-## Dependencies
-
-- `typer`: Command-line interface creation
-- `rich`: Rich text and formatting in the terminal
-- `inquirer`: Interactive command-line user interfaces
-- `requests`: HTTP requests to the Ollama Registry
-- `beautifulsoup4`: HTML parsing for registry data
 
 ## Contributing
 
@@ -86,7 +80,7 @@ This project is licensed under the Apache - see the LICENSE file for details.
 
 ## Acknowledgments
 
-- [Ollama](https://ollama.com/) for providing the registry and models
+- [Ollama](https://ollama.com/) for hosting the registry
 - All the open-source projects that make ORCA possible
 
 ---

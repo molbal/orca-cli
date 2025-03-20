@@ -3,11 +3,8 @@
 Main entry point for the ORCA application.
 """
 import typer
-from rich import print
-
-from src.ui import export_tag_gguf
-from ui import prompt_model_action, prompt_model_selector
-from registry import search_models
+from src.ui import prompt_model_action, prompt_model_selector, export_tag_gguf
+from src.registry import search_models
 
 app = typer.Typer(no_args_is_help=True)
 
